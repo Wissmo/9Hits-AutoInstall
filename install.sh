@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /root
+cd /root || exit
 if [[ $EUID -ne 0 ]]; then
     whiptail --title "ERROR" --msgbox "This script must be run as root" 8 78
     exit
@@ -45,15 +45,16 @@ else
                 ;;
             "4)")
                 echo "Trying detect and install automatic"
-                os=`awk -F= '/^NAME/{print $2}' /etc/os-release`
-                if [ $os == '"Ubuntu"' ]; then
+                os=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+                if [ "$os" == '"Ubuntu"' ]; then
                     os=1
-                if [ $os == '"Debian"' ]; then
+                elif [ $os == '"Debian"' ]; then
                     os=2
                 else
                     os=3
                 fi
-            token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
+        esac
+        token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
 	        tokenstatus=$?
 	        if [ $tokenstatus = 0 ]; then
 	          	echo "Token has been updated to $token"
@@ -62,8 +63,8 @@ else
 	           	exit
 	        fi
         option=$(whiptail --title "How many sessions you want?" --menu "Choose an option" 16 100 9 \
-		"1)" "Use one session" \
-		"2)" "Automatic max session based on system specs" \
+        "1)" "Use one session" \
+        "2)" "Automatic max session based on system specs" \
 		"3)" "Use custom number" 3>&2 2>&1 1>&3
 		)
 		case $option in
@@ -71,9 +72,9 @@ else
 				number=1
 				;;
 			"2)")
-				cores=`nproc --all`
-				memphy=`grep MemTotal /proc/meminfo | awk '{print $2}'`
-				memswap=`grep SwapTotal /proc/meminfo | awk '{print $2}'`
+				cores=$(nproc --all)
+				memphy=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+				memswap=$(grep SwapTotal /proc/meminfo | awk '{print $2}')
 				let memtotal=$memphy+$memswap
 				let memtotalgb=$memtotal/100000
 				let sscorelimit=$cores*6
@@ -122,12 +123,12 @@ else
     fi
     wget http://f.9hits.com/9hviewer/9hviewer-linux-x64.tar.bz2
     tar -xjvf 9hviewer-linux-x64.tar.bz2
-    cd /root/9HitsViewer_x64/sessions/
+    cd /root/9HitsViewer_x64/sessions/ || exit
     isproxy=false
-    for i in `seq 1 $number`;
+    for i in $(seq 1 "$number");
     do
         file="/root/9HitsViewer_x64/sessions/156288217488$i.txt"
-cat > $file <<EOFSS
+cat > "$file" <<EOFSS
 {
   "token": "$token",
   "note": "",
@@ -142,8 +143,9 @@ EOFSS
         isproxy=true
         proxytype=ssh
     done
-    cd /root
+    cd /root || exit
     mv 9Hits-AutoInstall/* ./
     crontab crontab
     chmod 777 -R /root
     exit
+fi
