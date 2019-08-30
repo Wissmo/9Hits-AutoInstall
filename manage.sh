@@ -13,24 +13,24 @@ else
 	case $os in
 		"1)")
 			crontab crontab
-			echo "All right"
+			echo "Sessions has been started"
 			;;
 		"2)")
 			crontab -r
 			/root/kill.sh
-			echo "All right"
+			echo "Sessions has been terminated"
 			;;
 		"3)")
 			rm /root/9HitsViewer_x64/sessions/156288217488*
 			token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
 	        tokenstatus=$?
 	        if [ $tokenstatus = 0 ]; then
-	          	echo "All right"
+	          	echo "Token has been updated"
 	        else
-	           	echo "User selected Cancel"
+	           	echo "User selected cancel"
 	           	exit
 	        fi
-			option=$(whiptail --title "How much sessions you want" --menu "Choose an option" 16 100 9 \
+			option=$(whiptail --title "How many sessions you want?" --menu "Choose an option" 16 100 9 \
 	        "1)" "Use one session"   \
 	        "2)" "Automatic max session based on system"   \
 	        "3)" "Use number you want"  3>&2 2>&1 1>&3
@@ -52,8 +52,8 @@ else
 	                memswap=`grep SwapTotal /proc/meminfo | awk '{print $2}'`
 	                let memtotal=$memphy+$memswap
 	                let memtotalgb=$memtotal/100000
-	                let sscorelimit=$cores*4
-	                let ssmemlimit=$memtotalgb*4/10
+	                let sscorelimit=$cores*6
+	                let ssmemlimit=$memtotalgb*6/10
 	                if [[ $sscorelimit -le $ssmemlimit ]]
 	                then
 	                    number=$sscorelimit
@@ -62,17 +62,11 @@ else
 	                fi
 	                ;;
 	            "3)")
-	                export NEWT_COLORS='
-	                window=,red
-	                border=white,red
-	                textbox=white,red
-	                button=black,white
-	                '
 	                whiptail --title "WARNING" --msgbox "IF YOU SET EXCESIVE AMOUNT OF SESSIONS THIS SESSIONS MAY BE BLOCKED || RECOMMENDED USE A SINGLE SESSION" 8 78
 	                number=$(whiptail --inputbox "ENTER NUMBER OF SESSIONS" 8 78 --title "SESSIONS" 3>&1 1>&2 2>&3)
 	                numberstatus=$?
 	                if [ $numberstatus = 0 ]; then
-	                    echo "All right"
+	                    echo "Selected amount of ${number} sessions has been set"
 	                else
 	                    echo "User selected Cancel"
 	                    exit
@@ -103,7 +97,7 @@ EOFSS
 			crontab -r
 			/root/kill.sh
 			rm -R 9Hits-AutoInstall 9HitsViewer_x64 9hviewer-linux-x64.tar.bz2 crashdetect.sh crontab install.sh kill.sh manage.sh reboot.sh
-			echo "All right"
+			echo "All files have been deleted"
 			;;
 	esac
 fi
