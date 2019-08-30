@@ -1,5 +1,7 @@
 #!/bin/bash
-cd /root
+cd /root || exit
+green=$(tput setaf 2)
+reset=$(tput sgr0)
 if [[ $EUID -ne 0 ]]; then
     whiptail --title "ERROR" --msgbox "This script must be run as root" 8 78
     exit
@@ -14,12 +16,12 @@ else
 	case $os in
 		"1)")
 			crontab crontab
-			echo "Sessions has been started"
+			echo "${green}Sessions has been started${reset}"
 			;;
 		"2)")
 			crontab -r
 			/root/kill.sh
-			echo "Sessions has been terminated"
+			echo "${green}Sessions has been terminated${reset}"
 			;;
 		"3)")
 			option=$(whiptail --title "How many sessions you want?" --menu "Choose an option" 16 100 9 \
@@ -30,11 +32,12 @@ else
 	        case $option in
 	            "1)")
 	                number=1
+					echo "${green}Amount of $number session has been set${reset}"
 	                ;;
 	            "2)")
-	                cores=`nproc --all`
-	                memphy=`grep MemTotal /proc/meminfo | awk '{print $2}'`
-	                memswap=`grep SwapTotal /proc/meminfo | awk '{print $2}'`
+	                cores=$(nproc --all)
+	                memphy=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+	                memswap=$(grep SwapTotal /proc/meminfo | awk '{print $2}')
 	                let memtotal=$memphy+$memswap
 	                let memtotalgb=$memtotal/100000
 	                let sscorelimit=$cores*6
@@ -42,10 +45,10 @@ else
 	                if [[ $sscorelimit -le $ssmemlimit ]]
 	                then
 	                    number=$sscorelimit
-						echo "Amount of $number sessions has been set"
+						echo "${green}Amount of $number sessions has been set${reset}"
 	                else
                     	number=$ssmemlimit
-						echo "Amount of $number sessions has been set"
+						echo "${green}Amount of $number sessions has been set${reset}"
 	                fi
 	                ;;
 	            "3)")
@@ -65,7 +68,7 @@ else
 					number=$(whiptail --inputbox "ENTER NUMBER OF SESSIONS" 8 78 --title "SESSIONS" 3>&1 1>&2 2>&3)
 	                numberstatus=$?
 	                if [ $numberstatus = 0 ]; then
-	                    echo "Selected amount of $number sessions has been set"
+	                    echo "${green}Selected amount of $number sessions has been set${reset}"
 	                else
 	                    echo "User selected Cancel"
 	                    exit
@@ -73,10 +76,10 @@ else
 	                ;;
 	        esac
 	       	isproxy=false
-		    for i in `seq 1 $number`;
+		    for i in $(seq 1 "$number");
 	    	do
 	        	file="/root/9HitsViewer_x64/sessions/156288217488$i.txt"
-cat > $file <<EOFSS
+cat > "$file" <<EOFSS
 {
   "token": "$token",
   "note": "",
@@ -97,7 +100,7 @@ EOFSS
 			token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
 	        tokenstatus=$?
 	        if [ $tokenstatus = 0 ]; then
-	          	echo "Token has been updated to $token"
+	          	echo "${green}Token has been updated to $token${reset}"
 	        else
 	           	echo "User selected cancel"
 	           	exit
@@ -107,7 +110,7 @@ EOFSS
 			crontab -r
 			/root/kill.sh
 			rm -R 9Hits-AutoInstall 9HitsViewer_x64 9hviewer-linux-x64.tar.bz2 crashdetect.sh crontab install.sh kill.sh manage.sh reboot.sh
-			echo "All files have been deleted"
+			echo "${green}All files have been deleted${reset}"
 			;;
 	esac
 fi
