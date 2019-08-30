@@ -91,7 +91,7 @@ cat > $file <<EOFSS
   "proxyServer": "",
   "proxyUser": "",
   "proxyPw": "",
-  "maxCpu": 5,
+  "maxCpu": 10,
   "isUse9HitsProxy": $isproxy
 }
 EOFSS
