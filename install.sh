@@ -1,5 +1,7 @@
 #!/bin/bash
 cd /root || exit
+green=$(tput setaf 2)
+reset=$(tput sgr0)
 if [[ $EUID -ne 0 ]]; then
     whiptail --title "ERROR" --msgbox "This script must be run as root" 8 78
     exit
@@ -57,7 +59,7 @@ else
         token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
 	        tokenstatus=$?
 	        if [ $tokenstatus = 0 ]; then
-	          	echo "Token has been updated to $token"
+	          	echo "${green}Token has been updated to $token${reset}"
 	        else
 	           	echo "User selected cancel"
 	           	exit
@@ -82,10 +84,10 @@ else
 				if [[ $sscorelimit -le $ssmemlimit ]]
 				then
 					number=$sscorelimit
-					echo "Amount of $number sessions has been set"
+					echo "${green}Amount of $number sessions has been set${reset}"
 				else
 					number=$ssmemlimit
-					echo "Amount of $number sessions has been set"
+					echo "${green}Amount of $number sessions has been set${reset}"
 				fi
 				;;
 			"3)")
@@ -105,7 +107,7 @@ else
 				number=$(whiptail --inputbox "ENTER NUMBER OF SESSIONS" 8 78 --title "SESSIONS" 3>&1 1>&2 2>&3)
 				numberstatus=$?
 				if [ $numberstatus = 0 ]; then
-					echo "Selected amount of $number sessions has been set"
+					echo "${green}Selected amount of $number sessions has been set${reset}"
 				else
 					echo "User selected Cancel"
 					exit
