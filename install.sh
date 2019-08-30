@@ -22,14 +22,14 @@ else
             os=3
             ;;
         *)
-            whiptail --title "ERROR" --msgbox "Sorry, for the moment this script does not support your Distro" 8 78
+            whiptail --title "ERROR" --msgbox "Sorry, for the moment this script does not support your distro" 8 78
             exit
             ;;
         esac
         token=$2
         number=1
     else
-        os=$(whiptail --title "What Linux Distro do you have?" --menu "Choose an option" 16 100 9 \
+        os=$(whiptail --title "What Linux distro do you have?" --menu "Choose an option" 16 100 9 \
         "1)" "Ubuntu" \
         "2)" "Debian" \
         "3)" "CentOS" \
@@ -46,14 +46,17 @@ else
                 os=3
                 ;;
             "4)")
-                echo "Trying detect and install automatic"
+                echo "${green}Trying to detect and install automatic${reset}"
                 os=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
                 if [ "$os" == '"Ubuntu"' ]; then
                     os=1
+					echo "${green}You have Ubuntu installed${reset}"
                 elif [ $os == '"Debian"' ]; then
                     os=2
+					echo "${green}You have Debian installed${reset}"
                 else
                     os=3
+					echo "${green}You have CentOS installed${reset}"
                 fi
         esac
         token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
