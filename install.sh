@@ -147,4 +147,3 @@ EOFSS
     crontab crontab
     chmod 777 -R /root
     exit
-fi
