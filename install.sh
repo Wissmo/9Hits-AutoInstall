@@ -48,10 +48,10 @@ else
             "4)")
                 echo "${green}Trying to detect and install automatic${reset}"
                 os=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
-                if [ $os == *"Ubuntu"* ]; then
+                if [[ $os == *"Ubuntu"* ]]; then
                     os=1
 					echo "${green}You have an Ubuntu installed${reset}"
-                elif [ $os == *"Debian"* ]; then
+                elif [[ $os == *"Debian"* ]]; then
                     os=2
 					echo "${green}You have an Debian installed${reset}"
                 else
