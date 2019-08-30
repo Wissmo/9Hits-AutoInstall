@@ -53,7 +53,6 @@ else
                 else
                     os=3
                 fi
-				;;
             token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
 	        tokenstatus=$?
 	        if [ $tokenstatus = 0 ]; then
