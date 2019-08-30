@@ -48,14 +48,13 @@ else
                 os=`awk -F= '/^NAME/{print $2}' /etc/os-release`
                 if [ $os == '"Ubuntu"' ]; then
                     os=1
-				if [ $os == '"Debian"' ]; then
-					os=2
+                if [ $os == '"Debian"' ]; then
+                    os=2
                 else
                     os=3
                 fi
 				;;
-        esac
-        token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
+            token=$(whiptail --inputbox "Enter your TOKEN" 8 78 --title "TOKEN" 3>&1 1>&2 2>&3)
 	        tokenstatus=$?
 	        if [ $tokenstatus = 0 ]; then
 	          	echo "Token has been updated to $token"
