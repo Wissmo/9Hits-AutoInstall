@@ -16,14 +16,12 @@ else
 	case $os in
 		"1)")
 			crontab crontab
-			sessions=$(find /root/9HitsViewer_x64/sessions/*txt | wc -l)
-			echo "${green}All $sessions Sessions has been started${reset}"
+			echo "${green}Sessions has been started${reset}"
 			;;
 		"2)")
 			crontab -r
 			/root/kill.sh
-			sessions=$(find /root/9HitsViewer_x64/sessions/*txt | wc -l)
-			echo "${green}All $sessions sessions has been terminated${reset}"
+			echo "${green}Sessions has been terminated${reset}"
 			;;
 		"3)")
 			option=$(whiptail --title "How many sessions you want?" --menu "Choose an option" 16 100 9 \
@@ -34,45 +32,22 @@ else
 	        case $option in
 	            "1)")
 	                number=1
-					sessions=$(find /root/9HitsViewer_x64/sessions/*txt | wc -l)
-					difference=$(($sessions-$number))
-					if [[ $number -lt $sessions ]]; then
-						for ssid in $(seq "$number" "$sessions"); do
-						rm "/root/9HitsViewer_x64/sessions/156288217488$ssid.txt"
-						done
-						echo "${green}Because the new number is lower than the old one, $difference sessions has been deleted${reset}"
-					fi
 					echo "${green}Amount of $number session has been set${reset}"
 	                ;;
 	            "2)")
 	                cores=$(nproc --all)
 	                memphy=$(grep MemTotal /proc/meminfo | awk '{print $2}')
 	                memswap=$(grep SwapTotal /proc/meminfo | awk '{print $2}')
-					sessions=$(find /root/9HitsViewer_x64/sessions/*txt | wc -l)
 	                let memtotal=$memphy+$memswap
 	                let memtotalgb=$memtotal/100000
 	                let sscorelimit=$cores*6
 	                let ssmemlimit=$memtotalgb*6/10
 	                if [[ $sscorelimit -le $ssmemlimit ]]
 	                then
-						number=$sscorelimit
-						difference=$(($sessions-$number))
-						if [[ $number -lt $sessions ]]; then
-							for ssid in $(seq "$number" "$sessions"); do
-							rm "/root/9HitsViewer_x64/sessions/156288217488$ssid.txt"
-							done
-							echo "${green}Because the new number is lower than the old one, $difference sessions has been deleted${reset}"
-						fi
+	                    number=$sscorelimit
 						echo "${green}Amount of $number sessions has been set${reset}"
 	                else
-						number=$ssmemlimit
-						difference=$(($sessions-$number))
-						if [[ $number -lt $sessions ]]; then
-							for ssid in $(seq "$number" "$sessions"); do
-							rm "/root/9HitsViewer_x64/sessions/156288217488$ssid.txt"
-							done
-							echo "${green}Because the new number is lower than the old one, $difference sessions has been deleted${reset}"
-						fi
+                    	number=$ssmemlimit
 						echo "${green}Amount of $number sessions has been set${reset}"
 	                fi
 	                ;;
@@ -91,16 +66,8 @@ else
 	                button=black,white
 	                '
 					number=$(whiptail --inputbox "ENTER NUMBER OF SESSIONS" 8 78 --title "SESSIONS" 3>&1 1>&2 2>&3)
-					sessions=$(find /root/9HitsViewer_x64/sessions/*txt | wc -l)
-					difference=$(($sessions-$number))
 	                numberstatus=$?
 	                if [ $numberstatus = 0 ]; then
-						if [[ $number -lt $sessions ]]; then
-							for ssid in $(seq "$number" "$sessions"); do
-								rm "/root/9HitsViewer_x64/sessions/156288217488$ssid.txt"
-							done
-							echo "${green}Because the new number is lower than the old one, $difference sessions has been deleted${reset}"
-						fi
 	                    echo "${green}Selected amount of $number sessions has been set${reset}"
 	                else
 	                    echo "User selected Cancel"
@@ -111,7 +78,7 @@ else
 	       	isproxy=false
 		    for i in $(seq 1 "$number");
 	    	do
-	        file="/root/9HitsViewer_x64/sessions/156288217488$i.txt"
+	        	file="/root/9HitsViewer_x64/sessions/156288217488$i.txt"
 cat > "$file" <<EOFSS
 {
   "token": "$token",
